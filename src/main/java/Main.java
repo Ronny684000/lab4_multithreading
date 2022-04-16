@@ -5,7 +5,7 @@ import java.util.stream.IntStream;
 public class Main {
 
     private static ExecutorService executorService = Executors.newCachedThreadPool();
-    private static HoneyPot stock = new HoneyPot();
+    private static Hive stock = new Hive(Config.BEE_COUNT);
 
     public static void main(String[] args) {
         Winnie winnie = new Winnie(Config.WINNIE_HONEY_CONSUMING, Config.WINNIE_SPEED, stock);
