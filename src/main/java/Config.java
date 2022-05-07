@@ -8,3 +8,4 @@ public class Config {
     public static final int BEE_MIN_HONEY_HARVEST_TIME = 7000;
     public static final int FEAR_TIME = 4000;
 }
+

@@ -25,21 +25,23 @@ final class Winnie implements Runnable {
     private void eat() {
         try {
             stock.getRule().lock();
+            System.out.println("Винни проводит разведку");
             Thread.sleep(eatingSpeed);
             stock.spendHoneySupply(honeyConsuming);
             System.out.println("Винни - " + Thread.currentThread().getName() + " съел мед: " +
                     honeyConsuming + " в " + new Date() + "\nТекущий запас: " + stock.getHoneyLeft());
-            stock.getRule().unlock();
         } catch (InterruptedException e) {
             e.printStackTrace();
+        } finally {
+            stock.getRule().unlock();
         }
     }
 
-    private void waitOut() {
+    public void runOut() {
         try {
+            System.out.println("Винни проводит разведку");
             System.out.println("Винни испугался пчел и убежал");
             Thread.sleep(Config.FEAR_TIME);
-            System.out.println("Винни вернулся");
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -47,9 +49,7 @@ final class Winnie implements Runnable {
 
     private void sleep() {
         try {
-            System.out.println("Винни спит");
-            Thread.sleep(Config.WINNIE_SLEEP_TIME_BEFORE_AWAKING);
-            System.out.println("Винни проснулся и решил поесть");
+            Thread.sleep(Config.WINNIE_SLEEP_TIME_BEFORE_AWAKING*2);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -58,15 +58,11 @@ final class Winnie implements Runnable {
     public void run() {
         sleep();
         while (true) {
-            if (!stock.getRule().isLocked()) {
-                if (stock.getHoneyLeft() < honeyConsuming) {
-                    die();
-                    break;
-                } else {
-                    eat();
-                }
+            if (stock.getHoneyLeft() < honeyConsuming) {
+                die();
+                break;
             } else {
-                waitOut();
+                eat();
             }
         }
     }
